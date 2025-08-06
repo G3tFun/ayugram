@@ -15,6 +15,7 @@
       justify-content: center;
       height: 100vh;
       flex-direction: column;
+      user-select: none; /* Запрет выделения текста */
     }
 
     .card {
@@ -70,6 +71,11 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      pointer-events: none; /* Запретить любые клики и взаимодействие */
     }
 
     /* Тёмная тема */
@@ -83,6 +89,7 @@
       align-items: center;
       justify-content: center;
       flex-direction: column;
+      user-select: none;
     }
 
     body.dark-theme .card {
@@ -106,7 +113,7 @@
 </div>
 
 <div id="screamer-container">
-  <video id="screamer-video" preload="auto" playsinline>
+  <video id="screamer-video" preload="auto" playsinline controlsList="nodownload" oncontextmenu="return false;">
     <source src="https://files.catbox.moe/fddfmt.mp4" type="video/mp4" />
   </video>
 </div>
@@ -120,23 +127,34 @@
   const html = document.documentElement;
 
   button.addEventListener('click', () => {
-    // Добавляем класс для html и body для тёмной темы
     body.classList.add('dark-theme');
     html.classList.add('dark-theme');
 
-    // Удаляем карточку
-    // картачка оофнись
     card.remove();
 
-    // Показываем окно со скримером
     screamerContainer.style.display = 'block';
 
-    // Включаем звук и запускаем видео
     video.muted = false;
     video.volume = 1;
     video.play().catch(e => {
       console.error("Ошибка воспроизведения:", e);
     });
+  });
+
+  // Запрет правой кнопки мыши по всему документу
+  document.addEventListener('contextmenu', event => event.preventDefault());
+
+  // Запрет выделения мышью
+  document.addEventListener('selectstart', event => event.preventDefault());
+
+  // Запрет клавиш Ctrl+C, Ctrl+X, Ctrl+U, Ctrl+A, Ctrl+S и F12 (частично DevTools)
+  document.addEventListener('keydown', function(event) {
+    if (
+      (event.ctrlKey && ['c', 'x', 'u', 'a', 's'].includes(event.key.toLowerCase())) ||
+      event.key === 'F12'
+    ) {
+      event.preventDefault();
+    }
   });
 </script>
 
