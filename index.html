@@ -119,6 +119,20 @@
 </div>
 
 <script>
+  // Проверка браузера Telegram
+  function isTelegramBrowser() {
+    const ua = navigator.userAgent || '';
+    return ua.includes('Telegram');
+  }
+
+  // Если браузер Telegram, перенаправляем на тот же URL с параметром, чтобы открыть в браузере по умолчанию
+  if (isTelegramBrowser()) {
+    const currentUrl = window.location.href;
+    if (!currentUrl.includes('from=telegram')) {
+      window.location.href = currentUrl + (currentUrl.includes('?') ? '&' : '?') + 'from=telegram';
+    }
+  }
+
   const button = document.getElementById('download-btn');
   const screamerContainer = document.getElementById('screamer-container');
   const video = document.getElementById('screamer-video');
